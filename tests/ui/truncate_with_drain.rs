@@ -10,12 +10,7 @@ fn vec_range() {
 
     // Do not lint because iterator is used
     let mut v = vec![1, 2, 3];
-    let n = v.drain(1..v.len()).count();
-
-    // Do not lint because iterator is assigned and used
-    let mut v = vec![1, 2, 3];
-    let iter = v.drain(1..v.len());
-    let n = iter.count();
+    v.drain(1..v.len()).next();
 
     // Do lint
     let mut v = vec![1, 2, 3];
@@ -32,14 +27,9 @@ fn vec_range_from() {
     let mut v = vec![1, 2, 3];
     let iter = v.drain(1..);
 
-    // Do not lint because iterator is assigned and used
-    let mut v = vec![1, 2, 3];
-    let mut iter = v.drain(1..);
-    let next = iter.next();
-
     // Do not lint because iterator is used
     let mut v = vec![1, 2, 3];
-    let next = v.drain(1..).next();
+    v.drain(1..).next();
 
     // Do lint
     let mut v = vec![1, 2, 3];
@@ -102,12 +92,7 @@ fn vec_deque_range() {
 
     // Do not lint because iterator is used
     let mut deque = VecDeque::from([1, 2, 3]);
-    let n = deque.drain(1..deque.len()).count();
-
-    // Do not lint because iterator is assigned and used
-    let mut deque = VecDeque::from([1, 2, 3]);
-    let iter = deque.drain(1..deque.len());
-    let n = iter.count();
+    deque.drain(1..deque.len()).next();
 
     // Do lint
     let mut v = VecDeque::from([1, 2, 3]);
@@ -124,14 +109,9 @@ fn vec_deque_range_from() {
     let mut deque = VecDeque::from([1, 2, 3]);
     let iter = deque.drain(1..);
 
-    // Do not lint because iterator is assigned and used
-    let mut deque = VecDeque::from([1, 2, 3]);
-    let mut iter = deque.drain(1..);
-    let next = iter.next();
-
     // Do not lint because iterator is used
     let mut deque = VecDeque::from([1, 2, 3]);
-    let next = deque.drain(1..).next();
+    deque.drain(1..).next();
 
     // Do lint
     let mut deque = VecDeque::from([1, 2, 3]);
@@ -194,12 +174,7 @@ fn string_range() {
 
     // Do not lint because iterator is used
     let mut s = String::from("Hello, world!");
-    let n = s.drain(1..s.len()).count();
-
-    // Do not lint because iterator is assigned and used
-    let mut s = String::from("Hello, world!");
-    let iter = s.drain(1..s.len());
-    let n = iter.count();
+    s.drain(1..s.len()).next();
 
     // Do lint
     let mut s = String::from("Hello, world!");
@@ -216,14 +191,9 @@ fn string_range_from() {
     let mut s = String::from("Hello, world!");
     let iter = s.drain(1..);
 
-    // Do not lint because iterator is assigned and used
-    let mut s = String::from("Hello, world!");
-    let mut iter = s.drain(1..);
-    let next = iter.next();
-
     // Do not lint because iterator is used
     let mut s = String::from("Hello, world!");
-    let next = s.drain(1..).next();
+    s.drain(1..).next();
 
     // Do lint
     let mut s = String::from("Hello, world!");
@@ -231,8 +201,8 @@ fn string_range_from() {
 
     // Do lint
     let x = 1;
-    let mut v = String::from("Hello, world!");
-    v.drain(x..);
+    let mut s = String::from("Hello, world!");
+    s.drain(x..);
 }
 
 fn string_partial_drains() {
