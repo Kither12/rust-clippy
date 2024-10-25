@@ -15,12 +15,12 @@ use rustc_span::symbol::sym;
 use super::TRUNCATE_WITH_DRAIN;
 
 // Add `String` here when it is added to diagnostic items
-const ACCEPTABLE_TYPES_WITH_ARG: [rustc_span::Symbol; 2] = [sym::Vec, sym::VecDeque];
+const ACCEPTABLE_TYPES: [rustc_span::Symbol; 2] = [sym::Vec, sym::VecDeque];
 
 pub fn is_range_open_ended(cx: &LateContext<'_>, expr: &Expr<'_>, container_path: Option<&Path<'_>>) -> bool {
     let ty = cx.typeck_results().expr_ty(expr);
     if let Some(higher::Range { start, end, limits }) = higher::Range::hir(expr) {
-        let start_is_none_or_min = start.map_or(true, |start| {
+        let start_is_none_or_min = start.is_none_or(|start| {
             if let rustc_ty::Adt(_, subst) = ty.kind()
                 && let bnd_ty = subst.type_at(0)
                 && let Some(min_val) = bnd_ty.numeric_min_val(cx.tcx)
@@ -32,7 +32,7 @@ pub fn is_range_open_ended(cx: &LateContext<'_>, expr: &Expr<'_>, container_path
                 false
             }
         });
-        let end_is_none_or_max = end.map_or(true, |end| match limits {
+        let end_is_none_or_max = end.is_none_or(|end| match limits {
             RangeLimits::Closed => {
                 if let rustc_ty::Adt(_, subst) = ty.kind()
                     && let bnd_ty = subst.type_at(0)
@@ -64,7 +64,7 @@ pub fn is_range_open_ended(cx: &LateContext<'_>, expr: &Expr<'_>, container_path
 
 pub(super) fn check(cx: &LateContext<'_>, expr: &Expr<'_>, recv: &Expr<'_>, span: Span, arg: Option<&Expr<'_>>) {
     if let Some(arg) = arg {
-        if match_acceptable_type(cx, recv, &ACCEPTABLE_TYPES_WITH_ARG)
+        if is_handled_collection_type(cx, recv)
             && let ExprKind::Path(QPath::Resolved(None, container_path)) = recv.kind
             && is_range_open_ended(cx, arg, Some(container_path))
         {
@@ -73,9 +73,9 @@ pub(super) fn check(cx: &LateContext<'_>, expr: &Expr<'_>, recv: &Expr<'_>, span
     }
 }
 
-fn match_acceptable_type(cx: &LateContext<'_>, expr: &Expr<'_>, types: &[rustc_span::Symbol]) -> bool {
+fn is_handled_collection_type(cx: &LateContext<'_>, expr: &Expr<'_>) -> bool {
     let expr_ty = cx.typeck_results().expr_ty(expr).peel_refs();
-    types.iter().any(|&ty| is_type_diagnostic_item(cx, expr_ty, ty))
+    ACCEPTABLE_TYPES.iter().any(|&ty| is_type_diagnostic_item(cx, expr_ty, ty))
     // String type is a lang item but not a diagnostic item for now so we need a separate check
         || is_type_lang_item(cx, expr_ty, LangItem::String)
 }
@@ -91,7 +91,7 @@ fn suggest(cx: &LateContext<'_>, expr: &Expr<'_>, recv: &Expr<'_>, span: Span, a
                 TRUNCATE_WITH_DRAIN,
                 span.with_hi(expr.span.hi()),
                 format!("`drain` used to truncate a `{ty_name}`"),
-                "try",
+                "use",
                 format!("truncate({})", snippet(cx, start.span, "0")),
                 Applicability::MachineApplicable,
             );
