@@ -64,7 +64,7 @@ LL |     s.drain(1..);
 error: `drain` used to truncate a `String`
   --> tests/ui/truncate_with_drain.rs:205:7
    |
-LL |     v.drain(x..);
+LL |     s.drain(x..);
    |       ^^^^^^^^^^ help: try: `truncate(x)`
 
 error: aborting due to 11 previous errors

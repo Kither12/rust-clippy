@@ -201,8 +201,8 @@ fn string_range_from() {
 
     // Do lint
     let x = 1;
-    let mut v = String::from("Hello, world!");
-    v.truncate(x);
+    let mut s = String::from("Hello, world!");
+    s.truncate(x);
 }
 
 fn string_partial_drains() {
