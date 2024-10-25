@@ -106,6 +106,7 @@ mod suspicious_command_arg_space;
 mod suspicious_map;
 mod suspicious_splitn;
 mod suspicious_to_owned;
+mod truncate_with_drain;
 mod type_id_on_box;
 mod uninit_assumed_init;
 mod unit_hash;
@@ -4166,6 +4167,31 @@ declare_clippy_lint! {
     "calling `.first().is_some()` or `.first().is_none()` instead of `.is_empty()`"
 }
 
+declare_clippy_lint! {
+    /// ### What it does
+    /// Checks for usage of `.drain(x..)` for the sole purpose of truncate a container.
+    ///
+    /// ### Why is this bad?
+    /// This creates an unnecessary iterator that is dropped immediately.
+    ///
+    /// Calling `.truncate(x)` also makes the intent clearer.
+    ///
+    /// ### Example
+    /// ```no_run
+    /// let mut v = vec![1, 2, 3];
+    /// v.drain(1..);
+    /// ```
+    /// Use instead:
+    /// ```no_run
+    /// let mut v = vec![1, 2, 3];
+    /// v.truncate(1);
+    /// ```
+    #[clippy::version = "1.84.0"]
+    pub TRUNCATE_WITH_DRAIN,
+    nursery,
+    "calling `drain` in order to `truncate` a `Vec`"
+}
+
 pub struct Methods {
     avoid_breaking_exported_api: bool,
     msrv: Msrv,
@@ -4327,6 +4353,7 @@ impl_lint_pass!(Methods => [
     NEEDLESS_CHARACTER_ITERATION,
     MANUAL_INSPECT,
     UNNECESSARY_MIN_OR_MAX,
+    TRUNCATE_WITH_DRAIN,
 ]);
 
 /// Extracts a method call name, args, and `Span` of the method name.
@@ -4634,6 +4661,7 @@ impl Methods {
                         && matches!(kind, StmtKind::Semi(_))
                         && args.len() <= 1
                     {
+                        truncate_with_drain::check(cx, expr, recv, span, args.first());
                         clear_with_drain::check(cx, expr, recv, span, args.first());
                     } else if let [arg] = args {
                         iter_with_drain::check(cx, expr, recv, span, arg);
