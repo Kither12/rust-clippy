@@ -4247,37 +4247,61 @@ declare_clippy_lint! {
 }
 
 declare_clippy_lint! {
+/// ### What it does
+///
+/// Checks for `Iterator::map` over ranges without using the parameter which
+/// could be more clearly expressed using `std::iter::repeat(...).take(...)`
+/// or `std::iter::repeat_n`.
+///
+/// ### Why is this bad?
+///
+/// It expresses the intent more clearly to `take` the correct number of times
+/// from a generating function than to apply a closure to each number in a
+/// range only to discard them.
+///
+/// ### Example
+///
+/// ```no_run
+/// let random_numbers : Vec<_> = (0..10).map(|_| { 3 + 1 }).collect();
+/// ```
+/// Use instead:
+/// ```no_run
+/// let f : Vec<_> = std::iter::repeat( 3 + 1 ).take(10).collect();
+/// ```
+///
+/// ### Known Issues
+///
+/// This lint may suggest replacing a `Map<Range>` with a `Take<RepeatWith>`.
+/// The former implements some traits that the latter does not, such as
+/// `DoubleEndedIterator`.
+#[clippy::version = "1.84.0"]
+pub MAP_WITH_UNUSED_ARGUMENT_OVER_RANGES,
+restriction,
+"map of a trivial closure (not dependent on parameter) over a range"
+}
+declare_clippy_lint! {
     /// ### What it does
-    ///
-    /// Checks for `Iterator::map` over ranges without using the parameter which
-    /// could be more clearly expressed using `std::iter::repeat(...).take(...)`
-    /// or `std::iter::repeat_n`.
+    /// Checks for usage of `.drain(x..)` for the sole purpose of truncate a container.
     ///
     /// ### Why is this bad?
+    /// This creates an unnecessary iterator that is dropped immediately.
     ///
-    /// It expresses the intent more clearly to `take` the correct number of times
-    /// from a generating function than to apply a closure to each number in a
-    /// range only to discard them.
+    /// Calling `.truncate(x)` also makes the intent clearer.
     ///
     /// ### Example
-    ///
     /// ```no_run
-    /// let random_numbers : Vec<_> = (0..10).map(|_| { 3 + 1 }).collect();
+    /// let mut v = vec![1, 2, 3];
+    /// v.drain(1..);
     /// ```
     /// Use instead:
     /// ```no_run
-    /// let f : Vec<_> = std::iter::repeat( 3 + 1 ).take(10).collect();
+    /// let mut v = vec![1, 2, 3];
+    /// v.truncate(1);
     /// ```
-    ///
-    /// ### Known Issues
-    ///
-    /// This lint may suggest replacing a `Map<Range>` with a `Take<RepeatWith>`.
-    /// The former implements some traits that the latter does not, such as
-    /// `DoubleEndedIterator`.
     #[clippy::version = "1.84.0"]
-    pub MAP_WITH_UNUSED_ARGUMENT_OVER_RANGES,
-    restriction,
-    "map of a trivial closure (not dependent on parameter) over a range"
+    pub TRUNCATE_WITH_DRAIN,
+    nursery,
+    "calling `drain` in order to `truncate` a `Vec`"
 }
 
 pub struct Methods {
@@ -4445,6 +4469,7 @@ impl_lint_pass!(Methods => [
     NEEDLESS_AS_BYTES,
     MAP_ALL_ANY_IDENTITY,
     MAP_WITH_UNUSED_ARGUMENT_OVER_RANGES,
+    TRUNCATE_WITH_DRAIN,
 ]);
 
 /// Extracts a method call name, args, and `Span` of the method name.

@@ -10,18 +10,21 @@ fn vec_range() {
 
     // Do not lint because iterator is used
     let mut v = vec![1, 2, 3];
-    v.drain(1..v.len()).next();
+    let n = v.drain(1..v.len()).count();
+
+    // Do not lint because iterator is assigned and used
+    let mut v = vec![1, 2, 3];
+    let iter = v.drain(1..v.len());
+    let n = iter.count();
 
     // Do lint
     let mut v = vec![1, 2, 3];
     v.drain(1..v.len());
-    //~^ ERROR: `drain` used to truncate a `Vec`
 
     // Do lint
     let x = 1;
     let mut v = vec![1, 2, 3];
     v.drain(x..v.len());
-    //~^ ERROR: `drain` used to truncate a `Vec`
 }
 
 fn vec_range_from() {
@@ -29,20 +32,23 @@ fn vec_range_from() {
     let mut v = vec![1, 2, 3];
     let iter = v.drain(1..);
 
+    // Do not lint because iterator is assigned and used
+    let mut v = vec![1, 2, 3];
+    let mut iter = v.drain(1..);
+    let next = iter.next();
+
     // Do not lint because iterator is used
     let mut v = vec![1, 2, 3];
-    v.drain(1..).next();
+    let next = v.drain(1..).next();
 
     // Do lint
     let mut v = vec![1, 2, 3];
     v.drain(1..);
-    //~^ ERROR: `drain` used to truncate a `Vec`
 
     // Do lint
     let x = 1;
     let mut v = vec![1, 2, 3];
     v.drain(x..);
-    //~^ ERROR: `drain` used to truncate a `Vec`
 }
 
 fn vec_partial_drains() {
@@ -96,18 +102,21 @@ fn vec_deque_range() {
 
     // Do not lint because iterator is used
     let mut deque = VecDeque::from([1, 2, 3]);
-    deque.drain(1..deque.len()).next();
+    let n = deque.drain(1..deque.len()).count();
+
+    // Do not lint because iterator is assigned and used
+    let mut deque = VecDeque::from([1, 2, 3]);
+    let iter = deque.drain(1..deque.len());
+    let n = iter.count();
 
     // Do lint
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(1..v.len());
-    //~^ ERROR: `drain` used to truncate a `VecDeque`
 
     // Do lint
     let x = 1;
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(x..v.len());
-    //~^ ERROR: `drain` used to truncate a `VecDeque`
 }
 
 fn vec_deque_range_from() {
@@ -115,20 +124,23 @@ fn vec_deque_range_from() {
     let mut deque = VecDeque::from([1, 2, 3]);
     let iter = deque.drain(1..);
 
+    // Do not lint because iterator is assigned and used
+    let mut deque = VecDeque::from([1, 2, 3]);
+    let mut iter = deque.drain(1..);
+    let next = iter.next();
+
     // Do not lint because iterator is used
     let mut deque = VecDeque::from([1, 2, 3]);
-    deque.drain(1..).next();
+    let next = deque.drain(1..).next();
 
     // Do lint
     let mut deque = VecDeque::from([1, 2, 3]);
     deque.drain(1..);
-    //~^ ERROR: `drain` used to truncate a `VecDeque`
 
     // Do lint
     let x = 1;
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(x..);
-    //~^ ERROR: `drain` used to truncate a `VecDeque`
 }
 
 fn vec_deque_partial_drains() {
@@ -182,18 +194,21 @@ fn string_range() {
 
     // Do not lint because iterator is used
     let mut s = String::from("Hello, world!");
-    s.drain(1..s.len()).next();
+    let n = s.drain(1..s.len()).count();
+
+    // Do not lint because iterator is assigned and used
+    let mut s = String::from("Hello, world!");
+    let iter = s.drain(1..s.len());
+    let n = iter.count();
 
     // Do lint
     let mut s = String::from("Hello, world!");
     s.drain(1..s.len());
-    //~^ ERROR: `drain` used to truncate a `String`
 
     // Do lint
     let x = 1;
     let mut v = String::from("Hello, world!");
     v.drain(x..s.len());
-    //~^ ERROR: `drain` used to truncate a `String`
 }
 
 fn string_range_from() {
@@ -201,20 +216,23 @@ fn string_range_from() {
     let mut s = String::from("Hello, world!");
     let iter = s.drain(1..);
 
+    // Do not lint because iterator is assigned and used
+    let mut s = String::from("Hello, world!");
+    let mut iter = s.drain(1..);
+    let next = iter.next();
+
     // Do not lint because iterator is used
     let mut s = String::from("Hello, world!");
-    s.drain(1..).next();
+    let next = s.drain(1..).next();
 
     // Do lint
     let mut s = String::from("Hello, world!");
     s.drain(1..);
-    //~^ ERROR: `drain` used to truncate a `String`
 
     // Do lint
     let x = 1;
-    let mut s = String::from("Hello, world!");
-    s.drain(x..);
-    //~^ ERROR: `drain` used to truncate a `String`
+    let mut v = String::from("Hello, world!");
+    v.drain(x..);
 }
 
 fn string_partial_drains() {

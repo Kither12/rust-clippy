@@ -1,71 +1,71 @@
 error: `drain` used to truncate a `Vec`
-  --> tests/ui/truncate_with_drain.rs:17:7
+  --> tests/ui/truncate_with_drain.rs:22:7
    |
 LL |     v.drain(1..v.len());
-   |       ^^^^^^^^^^^^^^^^^ help: use: `truncate(1)`
+   |       ^^^^^^^^^^^^^^^^^ help: try: `truncate(1)`
    |
    = note: `-D clippy::truncate-with-drain` implied by `-D warnings`
    = help: to override `-D warnings` add `#[allow(clippy::truncate_with_drain)]`
 
 error: `drain` used to truncate a `Vec`
-  --> tests/ui/truncate_with_drain.rs:22:7
+  --> tests/ui/truncate_with_drain.rs:27:7
    |
 LL |     v.drain(x..v.len());
-   |       ^^^^^^^^^^^^^^^^^ help: use: `truncate(x)`
+   |       ^^^^^^^^^^^^^^^^^ help: try: `truncate(x)`
 
 error: `drain` used to truncate a `Vec`
-  --> tests/ui/truncate_with_drain.rs:36:7
+  --> tests/ui/truncate_with_drain.rs:46:7
    |
 LL |     v.drain(1..);
-   |       ^^^^^^^^^^ help: use: `truncate(1)`
+   |       ^^^^^^^^^^ help: try: `truncate(1)`
 
 error: `drain` used to truncate a `Vec`
-  --> tests/ui/truncate_with_drain.rs:41:7
+  --> tests/ui/truncate_with_drain.rs:51:7
    |
 LL |     v.drain(x..);
-   |       ^^^^^^^^^^ help: use: `truncate(x)`
+   |       ^^^^^^^^^^ help: try: `truncate(x)`
 
 error: `drain` used to truncate a `VecDeque`
-  --> tests/ui/truncate_with_drain.rs:99:7
+  --> tests/ui/truncate_with_drain.rs:114:7
    |
 LL |     v.drain(1..v.len());
-   |       ^^^^^^^^^^^^^^^^^ help: use: `truncate(1)`
+   |       ^^^^^^^^^^^^^^^^^ help: try: `truncate(1)`
 
 error: `drain` used to truncate a `VecDeque`
-  --> tests/ui/truncate_with_drain.rs:104:7
+  --> tests/ui/truncate_with_drain.rs:119:7
    |
 LL |     v.drain(x..v.len());
-   |       ^^^^^^^^^^^^^^^^^ help: use: `truncate(x)`
+   |       ^^^^^^^^^^^^^^^^^ help: try: `truncate(x)`
 
 error: `drain` used to truncate a `VecDeque`
-  --> tests/ui/truncate_with_drain.rs:118:11
+  --> tests/ui/truncate_with_drain.rs:138:11
    |
 LL |     deque.drain(1..);
-   |           ^^^^^^^^^^ help: use: `truncate(1)`
+   |           ^^^^^^^^^^ help: try: `truncate(1)`
 
 error: `drain` used to truncate a `VecDeque`
-  --> tests/ui/truncate_with_drain.rs:123:7
+  --> tests/ui/truncate_with_drain.rs:143:7
    |
 LL |     v.drain(x..);
-   |       ^^^^^^^^^^ help: use: `truncate(x)`
+   |       ^^^^^^^^^^ help: try: `truncate(x)`
 
 error: `drain` used to truncate a `String`
-  --> tests/ui/truncate_with_drain.rs:181:7
+  --> tests/ui/truncate_with_drain.rs:206:7
    |
 LL |     s.drain(1..s.len());
-   |       ^^^^^^^^^^^^^^^^^ help: use: `truncate(1)`
+   |       ^^^^^^^^^^^^^^^^^ help: try: `truncate(1)`
 
 error: `drain` used to truncate a `String`
-  --> tests/ui/truncate_with_drain.rs:200:7
+  --> tests/ui/truncate_with_drain.rs:230:7
    |
 LL |     s.drain(1..);
-   |       ^^^^^^^^^^ help: use: `truncate(1)`
+   |       ^^^^^^^^^^ help: try: `truncate(1)`
 
 error: `drain` used to truncate a `String`
-  --> tests/ui/truncate_with_drain.rs:205:7
+  --> tests/ui/truncate_with_drain.rs:235:7
    |
-LL |     s.drain(x..);
-   |       ^^^^^^^^^^ help: use: `truncate(x)`
+LL |     v.drain(x..);
+   |       ^^^^^^^^^^ help: try: `truncate(x)`
 
 error: aborting due to 11 previous errors
 
