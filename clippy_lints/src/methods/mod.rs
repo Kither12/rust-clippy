@@ -4197,31 +4197,6 @@ declare_clippy_lint! {
 
 declare_clippy_lint! {
     /// ### What it does
-    /// Checks for usage of `.drain(x..)` for the sole purpose of truncating a container.
-    ///
-    /// ### Why is this bad?
-    /// This creates an unnecessary iterator that is dropped immediately.
-    ///
-    /// Calling `.truncate(x)` also makes the intent clearer.
-    ///
-    /// ### Example
-    /// ```no_run
-    /// let mut v = vec![1, 2, 3];
-    /// v.drain(1..);
-    /// ```
-    /// Use instead:
-    /// ```no_run
-    /// let mut v = vec![1, 2, 3];
-    /// v.truncate(1);
-    /// ```
-    #[clippy::version = "1.84.0"]
-    pub TRUNCATE_WITH_DRAIN,
-    nursery,
-    "calling `drain` in order to truncate a `Vec`"
-}
-
-declare_clippy_lint! {
-    /// ### What it does
     /// It detects useless calls to `str::as_bytes()` before calling `len()` or `is_empty()`.
     /// Checks for usage of `.map(…)`, followed by `.all(identity)` or `.any(identity)`.
     ///

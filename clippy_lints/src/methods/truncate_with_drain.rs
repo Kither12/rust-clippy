@@ -61,7 +61,7 @@ pub fn is_range_open_ended<'a>(
             }
         },
     });
-    return !start_is_none_or_min && end_is_none_or_max;
+    !start_is_none_or_min && end_is_none_or_max
 }
 
 pub(super) fn check(cx: &LateContext<'_>, expr: &Expr<'_>, recv: &Expr<'_>, span: Span, arg: Option<&Expr<'_>>) {
