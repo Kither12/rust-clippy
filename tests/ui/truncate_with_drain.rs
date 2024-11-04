@@ -15,11 +15,13 @@ fn vec_range() {
     // Do lint
     let mut v = vec![1, 2, 3];
     v.drain(1..v.len());
+    //~^ ERROR: `drain` used to truncate a `Vec`
 
     // Do lint
     let x = 1;
     let mut v = vec![1, 2, 3];
     v.drain(x..v.len());
+    //~^ ERROR: `drain` used to truncate a `Vec`
 }
 
 fn vec_range_from() {
@@ -34,11 +36,13 @@ fn vec_range_from() {
     // Do lint
     let mut v = vec![1, 2, 3];
     v.drain(1..);
+    //~^ ERROR: `drain` used to truncate a `Vec`
 
     // Do lint
     let x = 1;
     let mut v = vec![1, 2, 3];
     v.drain(x..);
+    //~^ ERROR: `drain` used to truncate a `Vec`
 }
 
 fn vec_partial_drains() {
@@ -97,11 +101,13 @@ fn vec_deque_range() {
     // Do lint
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(1..v.len());
+    //~^ ERROR: `drain` used to truncate a `VecDeque`
 
     // Do lint
     let x = 1;
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(x..v.len());
+    //~^ ERROR: `drain` used to truncate a `VecDeque`
 }
 
 fn vec_deque_range_from() {
@@ -116,11 +122,13 @@ fn vec_deque_range_from() {
     // Do lint
     let mut deque = VecDeque::from([1, 2, 3]);
     deque.drain(1..);
+    //~^ ERROR: `drain` used to truncate a `VecDeque`
 
     // Do lint
     let x = 1;
     let mut v = VecDeque::from([1, 2, 3]);
     v.drain(x..);
+    //~^ ERROR: `drain` used to truncate a `VecDeque`
 }
 
 fn vec_deque_partial_drains() {
@@ -179,11 +187,13 @@ fn string_range() {
     // Do lint
     let mut s = String::from("Hello, world!");
     s.drain(1..s.len());
+    //~^ ERROR: `drain` used to truncate a `String`
 
     // Do lint
     let x = 1;
     let mut v = String::from("Hello, world!");
     v.drain(x..s.len());
+    //~^ ERROR: `drain` used to truncate a `String`
 }
 
 fn string_range_from() {
@@ -198,11 +208,13 @@ fn string_range_from() {
     // Do lint
     let mut s = String::from("Hello, world!");
     s.drain(1..);
+    //~^ ERROR: `drain` used to truncate a `String`
 
     // Do lint
     let x = 1;
     let mut s = String::from("Hello, world!");
     s.drain(x..);
+    //~^ ERROR: `drain` used to truncate a `String`
 }
 
 fn string_partial_drains() {
