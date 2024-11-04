@@ -191,8 +191,8 @@ fn string_range() {
 
     // Do lint
     let x = 1;
-    let mut v = String::from("Hello, world!");
-    v.drain(x..s.len());
+    let mut s = String::from("Hello, world!");
+    s.drain(x..s.len());
     //~^ ERROR: `drain` used to truncate a `String`
 }
 
